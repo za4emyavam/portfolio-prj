@@ -1,6 +1,6 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://za4emyavam.com/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'Mykyta Shukh | Cloud & DevOps Engineer'
 
 theme = "github.com/panr/hugo-theme-terminal"
 
@@ -9,10 +9,11 @@ theme = "github.com/panr/hugo-theme-terminal"
 
 [params]
   themeColor = "green"
-  fullWidthTheme = true
+  fullWidthTheme = false
   centerTheme = true
-  
+
   [params.terminal]
     contentTypeName = "posts"
     showTerminalHeader = true
     terminalTitle = "my-portfolio ~ $"
+
