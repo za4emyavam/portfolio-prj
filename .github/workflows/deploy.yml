@@ -1,11 +1,13 @@
 name: Deploy Portfolio
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -32,13 +34,16 @@ jobs:
           aws-region: eu-central-1
 
       - name: Upload to S3
-        run: aws s3 cp site.zip aws s3 cp s3://portfolio-prj-artifact-bucket/artifacts/site.zip
-    
+        run: aws s3 cp site.zip s3://portfolio-prj-artifact-bucket/artifacts/site.zip
+
       - name: Trigger EC2 Update via SSM
         run: |
-          aws ssm send-command \
+          COMMAND_ID=$(aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets "Key=tag:Name,Values=portfolio-web-server" \
+            --targets "Key=tag:Name,Values=portfolio-web-instance" \
             --parameters 'commands=["/usr/local/bin/deploy.sh"]' \
-            --comment "Update site from GitHub Actions"
+            --query "Command.CommandId" \
+            --output text)
+          
+          echo "SSM Command sent"
     

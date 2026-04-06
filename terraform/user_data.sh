@@ -20,7 +20,7 @@ BUCKET="portfolio-prj-artifact-bucket/artifacts"
 FILE_KEY="site.zip"
 WEB_DIR="/usr/share/nginx"
 
-aws s3 cp s3://$BUCKET/$FILE_KEY /tmp/site.zip
+aws s3 cp s3://$BUCKET/$FILE_KEY /tmp/site.zip --region eu-central-1 --endpoint-url https://s3.dualstack.eu-central-1.amazonaws.com
 unzip -q -o /tmp/site.zip -d $WEB_DIR/html_new
 
 rm -rf $WEB_DIR/html_old
@@ -28,6 +28,7 @@ mv $WEB_DIR/html $WEB_DIR/html_old 2>/dev/null || true
 mv $WEB_DIR/html_new $WEB_DIR/html
 
 echo "Deployment complete."
+rm -f /tmp/site.zip
 INNEREOF
 
 chmod +x /usr/local/bin/deploy.sh
