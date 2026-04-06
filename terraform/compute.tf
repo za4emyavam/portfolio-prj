@@ -48,16 +48,7 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
 
-  user_data = <<-EOF
-                #!/bin/bash
-                sudo yum install nginx -y
-                systemctl start nginx.service
-                systemctl enable nginx.service
-                rm -rf /usr/share/nginx/html/*
-                aws s3 cp s3://portfolio-prj-artifact-bucket/artifacts/site.zip /tmp/site.zip
-                unzip /tmp/site.zip -d /usr/share/nginx/html/
-                systemctl restart nginx.service
-                EOF
+  user_data = file("${path.module}/user_data.sh")
 
   tags = {
     Name    = "portfolio-web-instance"
