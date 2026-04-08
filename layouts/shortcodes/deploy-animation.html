@@ -1,0 +1,138 @@
+<style>
+  .pipeline-container {
+    background: #1f222a; 
+    color: white; 
+    padding: 20px; 
+    border-radius: 10px;
+    max-width: 600px; 
+    margin: 20px auto; 
+    text-align: center; 
+    position: relative;
+  }
+  .nodes {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 40px; 
+    position: relative;
+  }
+  .node {
+    background: #333; 
+    padding: 12px; 
+    border-radius: 8px; 
+    z-index: 2; 
+    width: 80px;
+    border: 2px solid #555; 
+    transition: border-color 0.3s;
+  }
+  .node.active { 
+    border-color: #4CAF50; 
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); 
+  }
+  .line {
+    position: absolute; 
+    top: 50%; 
+    left: 5%; 
+    right: 5%; 
+    height: 4px;
+    background: #444; 
+    z-index: 1; 
+    transform: translateY(-50%);
+  }
+  .packet {
+    position: absolute; 
+    top: 50%; 
+    left: 0; 
+    width: 12px; 
+    height: 12px;
+    background: #FF9900; 
+    border-radius: 50%; 
+    z-index: 3;
+    transform: translateY(-50%); 
+    opacity: 0; 
+    transition: left 1s ease-in-out, opacity 0.2s;
+  }
+  .controls button {
+    background: #4CAF50; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px;
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 16px;
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    bottom: 3%;
+  }
+  .controls button:hover { 
+    background: #45a049; 
+  }
+  #status-text { 
+    min-height: 50px; 
+    font-weight: bold; 
+    color: #69af6c; 
+  }
+</style>
+
+<div class="pipeline-container">
+  <div id="status-text">Ready to deploy. Click "Start pipeline".</div>
+  
+  <div class="nodes">
+    <div class="line"></div>
+    <div class="packet" id="packet"></div>
+    <div class="node" id="node-dev">Dev</div>
+    <div class="node" id="node-git">GitHub</div>
+    <div class="node" id="node-aws">AWS S3</div>
+    <div class="node" id="node-ec2">EC2</div>
+    <div class="node" id="node-user">User</div>
+  </div>
+
+  <div class="controls">
+    <button id="next-btn" onclick="nextStep()">Start pipeline</button>
+  </div>
+</div>
+
+<script>
+  let currentStep = 0;
+  const steps = [
+    { text: "Ready to deploy. Click 'Start pipeline'.", pos: "5%", active: null },
+    { text: "1. Push code to GitHub.", pos: "5%", active: "node-dev" },
+    { text: "2. GitHub Actions is building the site.", pos: "28%", active: "node-git" },
+    { text: "3. Uploading site.zip to S3 Bucket.", pos: "49%", active: "node-aws" },
+    { text: "4. SSM Agent downloads the archive and updates Nginx.", pos: "70%", active: "node-ec2" },
+    { text: "5. The new version of the page is now available to all users.", pos: "92%", active: "node-user" }
+  ];
+
+  function nextStep() {
+    currentStep++;
+    if (currentStep >= steps.length) currentStep = 1;
+
+    const stepData = steps[currentStep];
+    document.getElementById('status-text').innerText = stepData.text;
+    
+    const packet = document.getElementById('packet');
+    if (currentStep != 1) {
+      packet.style.opacity = 1;
+      packet.style.left = stepData.pos;
+      
+      setTimeout(() => {
+        packet.style.opacity = 0.5;
+      }, 500);
+
+      setTimeout(() => {
+        packet.style.opacity = 0;
+      }, 500);
+    }
+    else {
+      packet.style.opacity = 0;
+      packet.style.left = stepData.pos;
+    }
+
+    document.querySelectorAll('.node').forEach(n => n.classList.remove('active'));
+    document.getElementById(stepData.active).classList.add('active');
+
+    const btn = document.getElementById('next-btn');
+    btn.innerText = currentStep === steps.length - 1 ? "Restart" : "Next step";
+  }
+</script>

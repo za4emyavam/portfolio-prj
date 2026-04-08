@@ -1,0 +1,49 @@
+<style>
+  .custom-terminal-nav {
+    display: flex;
+    gap: 15px;
+    margin-left: 20px;
+    z-index: 10;
+  }
+  .cmd-btn {
+    display: inline-block;
+    padding: 2px 10px;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .cmd-btn:hover {
+    background-color: var(--accent);
+    color: var(--background);
+  }
+
+  @media (max-width: 768px) {
+    .custom-terminal-nav {
+      display: none;
+    }
+  }
+</style>
+
+<header class="header">
+  <div class="header__inner" style="align-items: center;">
+    <div class="header__logo">
+      {{ partial "logo.html" . }}
+    </div>
+
+    <nav class="custom-terminal-nav">
+      <a href="/architecture/" class="cmd-btn">About this project</a>
+    </nav>
+    {{ if len $.Site.Menus }}
+      {{ partial "mobile-menu.html" . }}
+    {{ end }}
+    
+    {{ if and $.Site.Params.showLanguageSelector (len $.Site.Home.AllTranslations) }}
+      {{ partial "language-menu.html" . }}
+    {{ end }}
+  </div>
+
+  </header>
