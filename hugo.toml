@@ -1,6 +1,7 @@
 baseURL = 'https://za4emyavam.com/'
 languageCode = 'en-us'
 title = 'Mykyta Shukh | Cloud & DevOps Engineer'
+defaultContentLanguage = "en"
 
 [[module.imports]]
   path = "github.com/panr/hugo-theme-terminal"
@@ -9,3 +10,27 @@ title = 'Mykyta Shukh | Cloud & DevOps Engineer'
   themeColor = "green"
   fullWidthTheme = false
   centerTheme = true
+  showLanguageSelector = true
+
+[languages]
+  [languages.en]
+    languageName = "En"
+    title = "My Portfolio"
+    weight = 1
+      
+    [[languages.en.menu.main]]
+      identifier = "about"
+      name = "About this project"
+      url = "/architecture/"
+      weight = 20
+
+  [languages.uk]
+    languageName = "Ua"
+    title = "Моє Портфоліо"
+    weight = 2
+      
+    [[languages.uk.menu.main]]
+      identifier = "about"
+      name = "Про цей проект"
+      url = "/architecture/"
+      weight = 20

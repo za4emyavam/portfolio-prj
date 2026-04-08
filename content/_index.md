@@ -1,5 +1,5 @@
 ---
-title: "Mykyta Shukh | IT Infrastracture & DevOps Engineer"
+title: "Mykyta Sukh | IT Infrastructure & DevOps Engineer"
 date: 2026-04-03
 draft: false
 ---
@@ -18,11 +18,12 @@ draft: false
 
 **Technical Skills**
 
-* **Cloud & IaC:** AWS (EC2, VPC, IAM), Terraform
+* **Cloud & IaC:** AWS (EC2, VPC, S3, ALB, IAM, SSM), Terraform
 * **CI/CD & Automation:** GitHub Actions, Jenkins, Ansible, Git
 * **Containerization:** Docker
 * **OS & Scripting:** Linux (Debian/Ubuntu/RHEL), Bash, Python
-* **Networking & Web:** TCP/IP, DNS, Cloudflare, Nginx 
+* **Observability**: Prometheus, Grafana, Loki, Alloy
+* **Networking & Web:** TCP/IP, DNS, Cloudflare(CDN, WAF), Nginx, Load Balancing
 * **Databases:** PostgreSQL, MySQL
 
 **Soft Skills**

@@ -16,7 +16,7 @@ The entire infrastructure is provisioned and managed as code using **Terraform**
 * **Routing:** Outbound internet connectivity is facilitated exclusively via IPv6 through an Egress-Only Internet Gateway, preventing any uninitiated inbound traffic.
 * **Web Server:** A lightweight Nginx server handles the efficient delivery of static assets.
 
-The reason for choosing an EC-based architecture over S3+CloudFront is described below in the **Architectural Trade-offs & Design Decisions** section.
+The reason for choosing an EC2-based architecture over S3+CloudFront is described below in the **Architectural Trade-offs & Design Decisions** section.
 
 {{<infra-animation>}}
 
@@ -44,4 +44,4 @@ This architecture rigorously enforces the Principle of Least Privilege:
 
 * The EC2 instance is granted read-only access restricted entirely to the specific S3 artifact bucket.
 
-* The GitHub Actions runner utilizes an inline IAM policy that permits s3:PutObject operations only on the designated artifact prefix, and restricts ssm:SendCommand execution strictly to instances bearing the portfolio-web-instance resource tag.
+* The GitHub Actions runner utilizes an inline IAM policy that permits `s3:PutObject` operations only on the designated artifact prefix, and restricts `ssm:SendCommand` execution strictly to instances bearing the `portfolio-web-instance` resource tag.
