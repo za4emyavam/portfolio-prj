@@ -1,0 +1,242 @@
+<style>
+  .traffic-container {
+    background: #1f222a;
+    color: #fff;
+    padding: 20px; 
+    border-radius: 8px; 
+    max-width: 750px; 
+    margin: 20px auto; 
+    position: relative;
+  }
+  .arch-box { 
+    border: 2px dashed; 
+    border-radius: 8px; 
+    position: relative; 
+    padding: 20px; 
+    margin-top: 30px; 
+  }
+  
+  .aws-cloud { 
+    border-color: #FF9900; 
+    background: rgba(255, 153, 0, 0.05); 
+  }
+  .aws-vpc { 
+    border-color: #3b48cc; 
+    background: rgba(59, 72, 204, 0.05); 
+  }
+  .public-subnet { 
+    border-color: #4CAF50; 
+    background: rgba(76, 175, 80, 0.1); 
+    margin-bottom: 20px; 
+  }
+  .private-subnet { 
+    border-color: #00a4a6; 
+    background: rgba(0, 164, 166, 0.1); 
+  }
+  
+  .box-label {
+    position: absolute; 
+    top: -12px; 
+    left: 15px; 
+    background: #1e1e1e;
+    padding: 0 10px; 
+    font-weight: bold; 
+    font-size: 14px;
+  }
+  
+  .cloud-label { 
+    color: #FF9900; 
+  }
+  .vpc-label { 
+    color: #8c98ff; 
+  }
+  .pub-label { 
+    color: #81c784; 
+  }
+  .priv-label { 
+    color: #00e0e3; 
+  }
+
+  .external-row { 
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center; 
+    margin-bottom: 30px; 
+    margin-top: 10px;
+  }
+  
+  .arch-node {
+    background: #232f3e;
+    padding: 12px 20px;
+    border-radius: 8px; 
+    border: 2px solid #555;
+    text-align: center; 
+    z-index: 2; 
+    position: relative; 
+    font-size: 14px; 
+    width: 140px;
+  }
+  
+  .node-user { 
+    background: #4a148c; 
+    border-color: #9c27b0; 
+  }
+  .node-cf { 
+    background: #e65100; 
+    border-color: #ff9800; 
+  }
+  
+  .active-node { 
+    border-color: #fff; 
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); 
+  }
+
+  .packet {
+    position: absolute; 
+    width: 14px; 
+    height: 14px; 
+    border-radius: 50%; 
+    z-index: 10;
+    opacity: 0; 
+    pointer-events: none; 
+    transition: all 1s ease-in-out;
+    background: #fff; 
+    box-shadow: 0 0 10px #fff;
+  }
+
+  .controls { 
+    text-align: center; 
+    margin-top: 25px; 
+  }
+  .controls button {
+    background: #4CAF50; 
+    color: white; 
+    font-weight: bold; 
+    border: none;
+    padding: 10px 20px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 16px;
+    margin-top: 30px;
+  }
+  .controls button:hover { 
+    background: #45a049;
+  }
+  #user-flow-status { 
+    text-align: center;
+    font-weight: bold; 
+    color: #69af6c; 
+    min-height: 50px; 
+    margin-bottom: 15px; 
+  }
+</style>
+
+<div class="traffic-container" id="user-animation-area">
+  <div id="user-flow-status">Press "Follow the user's path".</div>
+  
+  <div class="packet" id="web-pkt"></div>
+
+  <div class="external-row">
+    <div class="arch-node node-user" id="u-browser">👨‍💻 User<br><small>(Browser)</small></div>
+    <div class="arch-node node-cf" id="u-cf">☁️ Cloudflare<br><small>(DNS / WAF / Cache)</small></div>
+  </div>
+
+  <div class="arch-box aws-cloud">
+    <div class="box-label cloud-label">AWS Region</div>
+    
+    <div class="arch-box aws-vpc">
+      <div class="box-label vpc-label">VPC</div>
+
+      <div class="arch-box public-subnet">
+        <div class="box-label pub-label">Public Subnet</div>
+        <div class="arch-node" id="u-alb" style="margin: 0 auto;">Application Load Balancer<br></div>
+      </div>
+
+      <div class="arch-box private-subnet">
+        <div class="box-label priv-label">Private Subnet</div>
+        <div class="arch-node" id="u-ec2" style="margin: 0 auto;">EC2 Instance<br><small>(Nginx Web Server)</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="user-btn" onclick="nextUserStep()">Follow the user's path</button>
+  </div>
+</div>
+
+<script>
+  let uStep = 0;
+  
+  function getUpx(elemId) {
+    const el = document.getElementById(elemId);
+    const container = document.getElementById('user-animation-area');
+    const elRect = el.getBoundingClientRect();
+    const contRect = container.getBoundingClientRect();
+    return {
+      top: (elRect.top - contRect.top + elRect.height / 2 - 7) + 'px',
+      left: (elRect.left - contRect.left + elRect.width / 2 - 7) + 'px'
+    };
+  }
+
+  function movePacket(startId, endId, callback) {
+    const pkt = document.getElementById('web-pkt');
+    const startPos = getUpx(startId);
+    const endPos = getUpx(endId);
+    
+    pkt.style.transition = 'none';
+    pkt.style.top = startPos.top;
+    pkt.style.left = startPos.left;
+    pkt.style.opacity = 1;
+    
+    setTimeout(() => {
+      pkt.style.transition = 'all 1s ease-in-out';
+      pkt.style.top = endPos.top;
+      pkt.style.left = endPos.left;
+    }, 50);
+
+    setTimeout(() => { 
+      if(callback) callback(); 
+      else pkt.style.opacity = 0; 
+    }, 1050);
+  }
+
+  function hlNode(nodeId) {
+    document.querySelectorAll('.arch-node').forEach(n => n.classList.remove('active-node'));
+    if(nodeId) document.getElementById(nodeId).classList.add('active-node');
+  }
+
+  function nextUserStep() {
+    uStep++;
+    if (uStep > 4) uStep = 1;
+
+    const statusObj = document.getElementById('user-flow-status');
+    const btn = document.getElementById('user-btn');
+
+    if (uStep === 1) {
+      statusObj.innerText = "1. The user opens the website via HTTPS. Cloudflare performs SSL termination.";
+      hlNode('u-cf');
+      movePacket('u-browser', 'u-cf');
+      btn.innerText = "Next step";
+    } 
+    else if (uStep === 2) {
+      statusObj.innerText = "2. Cloudflare filters traffic (WAF) and proxies it via internal HTTP to ALB.";
+      hlNode('u-alb');
+      movePacket('u-cf', 'u-alb');
+    } 
+    else if (uStep === 3) {
+      statusObj.innerText = "3. The ALB in the public subnet receives the HTTP request and routes it to the hidden EC2.";
+      hlNode('u-ec2');
+      movePacket('u-alb', 'u-ec2');
+    } 
+    else if (uStep === 4) {
+      statusObj.innerText = "4. Nginx serves the website. The response is returned to the user via an encrypted HTTPS channel.";
+      hlNode('u-browser');
+      movePacket('u-ec2', 'u-alb', () => {
+        movePacket('u-alb', 'u-cf', () => {
+          movePacket('u-cf', 'u-browser');
+        });
+      });
+      btn.innerText = "Restart";
+    }
+  }
+</script>
