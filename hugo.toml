@@ -11,6 +11,7 @@ defaultContentLanguage = "en"
   fullWidthTheme = false
   centerTheme = true
   showLanguageSelector = true
+  images = ["/icon.png"]
 
 [languages]
   [languages.en]
