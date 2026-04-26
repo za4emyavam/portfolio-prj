@@ -4,7 +4,7 @@ draft: false
 ---
 {{< profile img="/photo.JPG" title="Cloud & DevOps Engineer" name="Mykyta Shukh">}}
 
-📍 Варшава, Польща | ✉️ [za4emyavam@gmail.com](mailto:za4emyavam@gmail.com) | 🔗 [LinkedIn](https://linkedin.com/in/mykytashukh)
+📍 Варшава, Польща | ✉️ [shukh_mykyta@proton.me](mailto:shukh_mykyta@proton.me) | 🔗 [LinkedIn](https://linkedin.com/in/mykytashukh)
 
 ---
 
@@ -17,9 +17,9 @@ draft: false
 
 **Професійні навички**
 
-* **Cloud & IaC:** AWS (EC2, VPC, S3, ALB, IAM, SSM), Terraform
+* **Cloud & IaC:** AWS (EC2, VPC, S3, ALB, IAM, EKS), Terraform
 * **CI/CD & Automation:** GitHub Actions, Jenkins, Ansible, Git
-* **Containerization:** Docker
+* **Containerization:** Docker, Kubernetes
 * **OS & Scripting:** Linux (Debian/Ubuntu/RHEL), Bash, Python
 * **Observability**: Prometheus, Grafana, Loki, Alloy
 * **Networking & Web:** TCP/IP, DNS, Cloudflare(CDN, WAF), Nginx, Load Balancing
@@ -48,6 +48,7 @@ draft: false
 
 ### 📜 СЕРТИФІКАТИ
 
+* [HashiCorp Certified: Terraform Associate (004)](https://www.credly.com/badges/036ffced-84af-4c79-bd64-fdbb3771b155/public_url)
 * [AWS Certified Cloud Practitioner](https://www.credly.com/badges/d783182d-75b3-4986-969e-1407a432e749/public_url)
 * [Google Cloud Cybersecurity Certificate](https://www.credly.com/badges/c7e2a8cc-1df5-4c11-bf13-01b1efc6506c/public_url)
 * [Cisco Cybersecurity Essentials](https://www.credly.com/badges/adfd74bc-8e94-4d0a-95c4-1645a993373e/public_url)
